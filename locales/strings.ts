@@ -1,0 +1,76 @@
+const strings = {
+  en: {
+    createAccount: "Create an Account",
+    tagline: "Join the BusTracker family 🚌",
+    fullName: "Full Name",
+    phoneNumber: "Phone Number",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    createButton: "Create Account",
+    alreadyRegistered: "Already registered?",
+    signIn: "Sign In",
+    login: "Login",
+    appTitle: "Solapur City Bus",
+    corporation: "Solapur Municipal Corporation",
+    findBus: "Find a Bus 🗺️",
+    source: "Source",
+    destination: "Destination",
+    selectSource: "-- Select Source --",
+    selectDestination: "-- Select Destination --",
+    findBuses: "🔵 Find Buses",
+    fillBoth: "Please select both source and destination",
+    findingBuses: "Finding buses from",
+    to: "to",
+    liveMap: "Live Map",
+    routeInfo: "Route Info",
+
+    // 🔽 Profile Page
+    profile: "Profile",
+    registeredUser: "Registered User",
+    logout: "Log Out",
+    home: "Home",
+
+    busNumber: 'Bus Number',
+    from: 'From',
+    at: 'at',
+  },
+
+  mr: {
+    createAccount: "खाते तयार करा",
+    tagline: "बस ट्रॅकर कुटुंबात सामील व्हा 🚌",
+    fullName: "पूर्ण नाव",
+    phoneNumber: "फोन नंबर",
+    password: "पासवर्ड",
+    confirmPassword: "पासवर्ड पुन्हा टाका",
+    createButton: "खाते तयार करा",
+    alreadyRegistered: "आधीच नोंदणी केली आहे?",
+    signIn: "साइन इन करा",
+    login: "लॉगिन",
+    appTitle: "सोलापूर सिटी बस",
+    corporation: "सोलापूर महानगरपालिका",
+    findBus: "बस शोधा 🗺️",
+    source: "स्रोत",
+    destination: "गंतव्य",
+    selectSource: "-- स्रोत निवडा --",
+    selectDestination: "-- गंतव्य निवडा --",
+    findBuses: "🔵 बस शोधा",
+    fillBoth: "कृपया स्रोत आणि गंतव्य निवडा",
+    findingBuses: "बस शोधत आहे",
+    to: "ते",
+    liveMap: "थेट नकाशा",
+    routeInfo: "मार्ग माहिती",
+
+    // 🔽 Profile Page
+    profile: "प्रोफाईल",
+    registeredUser: "नोंदणीकृत वापरकर्ता",
+    logout: "बाहेर पडा",
+    home: "मुख्यपृष्ठ",
+
+
+    busNumber: "बस क्रमांक",
+    from: "पासून",
+    at: "वाजता",
+  },
+};
+
+export default strings;
