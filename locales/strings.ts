@@ -1,7 +1,7 @@
 const strings = {
   en: {
     createAccount: "Create an Account",
-    tagline: "Join the BusTracker family 🚌",
+    tagline: "Join the BusTracker family",
     fullName: "Full Name",
     phoneNumber: "Phone Number",
     password: "Password",
@@ -10,14 +10,14 @@ const strings = {
     alreadyRegistered: "Already registered?",
     signIn: "Sign In",
     login: "Login",
-    appTitle: "Solapur City Bus",
+    appTitle: "Track My Bus",
     corporation: "Solapur Municipal Corporation",
-    findBus: "Find a Bus 🗺️",
+    findBus: "Select The Route ",
     source: "Source",
     destination: "Destination",
     selectSource: "-- Select Source --",
     selectDestination: "-- Select Destination --",
-    findBuses: "🔵 Find Buses",
+    findBuses: "Find Buses",
     fillBoth: "Please select both source and destination",
     findingBuses: "Finding buses from",
     to: "to",
@@ -28,7 +28,7 @@ const strings = {
     profile: "Profile",
     registeredUser: "Registered User",
     logout: "Log Out",
-    home: "Home",
+    home: "Back",
 
     busNumber: 'Bus Number',
     from: 'From',
@@ -37,7 +37,7 @@ const strings = {
 
   mr: {
     createAccount: "खाते तयार करा",
-    tagline: "बस ट्रॅकर कुटुंबात सामील व्हा 🚌",
+    tagline: "बस ट्रॅकर कुटुंबात सामील व्हा",
     fullName: "पूर्ण नाव",
     phoneNumber: "फोन नंबर",
     password: "पासवर्ड",

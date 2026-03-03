@@ -1,86 +1,31 @@
-// // const mongoose = require('mongoose');
-
-// // const UserSchema = new mongoose.Schema({
-// //   name: {
-// //     type: String,
-// //     required: true,
-// //   },
-// //   phone: {
-// //     type: String,
-// //     required: true,
-// //     unique: true,
-// //   },
-// //   password: {
-// //     type: String,
-// //     required: true,
-// //   },
-// // });
-
-// // module.exports = mongoose.model('User', UserSchema);
-
-
-// // backend/models/User.js
-// const mongoose = require('mongoose');
-
-// const userSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   phone: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
-// // ✅ Add this line to make (name + phone + password) unique together
-// // userSchema.index({ name: 1, phone: 1, password: 1 }, { unique: true });
-
-// // Export the model
-// module.exports = mongoose.model('User', userSchema);
-// backend/models/User.js
-
-
-// const mongoose = require('mongoose');
-
-// const userSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   phone: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
-
-// module.exports = mongoose.model('User', userSchema);
-
-
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ['USER', 'ADMIN'],
+      default: 'USER',
+    },
   },
-  phone: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-}, { collection: 'user' }); // 👈 force collection name
+  {
+    timestamps: true, // adds createdAt and updatedAt automatically
+  }
+);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('users', userSchema);

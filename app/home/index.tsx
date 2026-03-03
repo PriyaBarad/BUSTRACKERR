@@ -1,345 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import {
-//   View,
-//   Text,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Alert,
-// } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
-// import { useRouter } from 'expo-router';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import strings from '../../locales/strings';
-
-// type Bus = {
-//   _id: string;
-//   source: string;
-//   destination: string;
-//   via: string;
-//   busNumber: string;
-//   timings: string[];
-// };
-
-// function getTodayDate() {
-//   const today = new Date();
-//   return today.toLocaleDateString('en-IN', {
-//     weekday: 'long',
-//     day: '2-digit',
-//     month: 'long',
-//     year: 'numeric',
-//   });
-// }
-
-// export default function HomeScreen() {
-//   const [source, setSource] = useState('');
-//   const [destination, setDestination] = useState('');
-//   const [lang, setLang] = useState<'en' | 'mr'>('en');
-//   const [filteredBuses, setFilteredBuses] = useState<Bus[]>([]);
-//   const [availableSources, setAvailableSources] = useState<string[]>([]);
-//   const [availableDestinations, setAvailableDestinations] = useState<string[]>([]);
-//   const [selectedBus, setSelectedBus] = useState<Bus | null>(null);
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     const getLangAndStops = async () => {
-//       const storedLang = await AsyncStorage.getItem('language');
-//       const languageKey = storedLang === 'mr' ? 'mr' : 'en';
-//       setLang(languageKey);
-
-//       try {
-//         const res = await fetch('http://10.1.65.155:5000/api/routes/stops');
-//         const data = await res.json();
-//         console.log('🎯 Data from /stops:', data);
-
-//         setAvailableSources((data?.sources || []).sort());
-//         setAvailableDestinations((data?.destinations || []).sort());
-//       } catch (err) {
-//         console.error('❌ Error fetching stops:', err);
-//         const fallback = ['Solapur', 'Pune', 'Mumbai'];
-//         setAvailableSources(fallback);
-//         setAvailableDestinations(fallback);
-//       }
-//     };
-
-//     getLangAndStops();
-//   }, []);
-
-//   const handleFindBuses = async () => {
-//     if (!source || !destination || source === destination) {
-//       Alert.alert(strings[lang].fillBoth);
-//       return;
-//     }
-
-//     try {
-//       const res = await fetch(
-//         `http://10.1.65.155:5000/api/routes/search?source=${source}&destination=${destination}`
-//       );
-//       const data = await res.json();
-
-//       if (res.ok) {
-//         setFilteredBuses(data);
-//         setSelectedBus(null);
-//         if (data.length === 0) {
-//           Alert.alert(
-//             lang === 'mr' ? 'कोणतीही बस सापडली नाही' : 'No buses found'
-//           );
-//         }
-//       } else {
-//         Alert.alert('Error', data.message || 'Something went wrong');
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       Alert.alert('Server Error', 'Please check your backend connection.');
-//     }
-//   };
-
-//   const handleBusSelect = (bus: Bus) => {
-//     setSelectedBus(bus);
-//   };
-
-//   const handleLiveMap = async (busNumber: string) => {
-//   try {
-//     const encodedBusNumber = encodeURIComponent(busNumber.trim()); // ✅ Handles spaces
-//     const url = `http://10.1.65.155:5000/api/routes/deviceId?busNumber=${encodedBusNumber}`;
-
-//     console.log("🌐 Fetching deviceId from:", url);
-
-//     const response = await fetch(url);
-//     const data = await response.json();
-
-//     console.log("🚍 Device ID API response:", data);
-
-//     if (data.deviceId) {
-//       router.push({
-//       pathname: "/map",
-//       params: {
-//       deviceId: data.deviceId,
-//       busNumber: busNumber, // Pass it here
-//   },
-// });
-//     } else {
-//       Alert.alert("Error", "Device ID not found.");
-//     }
-//   } catch (error) {
-//     console.error("❌ Fetch deviceId error:", (error as Error).message);
-//     Alert.alert("Error", "Unable to fetch device ID.");
-//   }
-// };
-
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.card}>
-//         <TouchableOpacity
-//           style={styles.profileIcon}
-//           onPress={() => router.push('/profile')}
-//         >
-//           <Text style={styles.profileEmoji}>👤</Text>
-//         </TouchableOpacity>
-
-//         <Text style={styles.logo}>🚌 {strings[lang].appTitle}</Text>
-//         <Text style={styles.subtitle}>{strings[lang].corporation}</Text>
-//         <Text style={styles.date}>{getTodayDate()}</Text>
-
-//         <Text style={styles.sectionTitle}>{strings[lang].findBus}</Text>
-
-//         <Text style={styles.label}>{strings[lang].source}</Text>
-//         <Picker
-//           selectedValue={source}
-//           onValueChange={(value) => setSource(value)}
-//           style={styles.picker}
-//         >
-//           <Picker.Item label={strings[lang].selectSource} value="" />
-//           {availableSources.map((src) => (
-//             <Picker.Item key={src} label={src} value={src} />
-//           ))}
-//         </Picker>
-
-//         <Text style={styles.label}>{strings[lang].destination}</Text>
-//         <Picker
-//           selectedValue={destination}
-//           onValueChange={(value) => setDestination(value)}
-//           style={styles.picker}
-//         >
-//           <Picker.Item label={strings[lang].selectDestination} value="" />
-//           {availableDestinations.map((dst) => (
-//             <Picker.Item key={dst} label={dst} value={dst} />
-//           ))}
-//         </Picker>
-
-//         <TouchableOpacity style={styles.findButton} onPress={handleFindBuses}>
-//           <Text style={styles.findButtonText}>
-//             {strings[lang].findBuses}
-//           </Text>
-//         </TouchableOpacity>
-
-//         {filteredBuses.map((bus) => (
-//           <TouchableOpacity
-//             key={bus._id}
-//             onPress={() => handleBusSelect(bus)}
-//             style={[
-//               styles.busItem,
-//               selectedBus?.busNumber === bus.busNumber && styles.selectedCard,
-//             ]}
-//           >
-//             <Text style={styles.busText}>🚌 Bus No.: {bus.busNumber}</Text>
-//             <Text style={styles.busText}>🧭 Via: {bus.via}</Text>
-//             <Text style={styles.busText}>🕒 Timings: {bus.timings.join(', ')}</Text>
-//           </TouchableOpacity>
-//         ))}
-
-//         <View style={styles.navRow}>
-//         <NavButton
-//           label={strings[lang].liveMap}
-//           onPress={() => {
-//       if (selectedBus) {
-//         handleLiveMap(selectedBus.busNumber);
-//       } else {
-//         Alert.alert('Please select a bus first');
-//       }
-//     }}
-//   />
-//   <NavButton
-//     label={strings[lang].routeInfo}
-//     onPress={() => router.push('./busRoutes')}
-//   />
-// </View>
-//       </View>
-//       <Text style={styles.footer}>© 2025 {strings[lang].corporation}</Text>
-//     </View>
-//   );
-// }
-
-// function NavButton({
-//   label,
-//   onPress,
-// }: {
-//   label: string;
-//   onPress: () => void;
-// }) {
-//   return (
-//     <TouchableOpacity style={styles.navButton} onPress={onPress}>
-//       <Text style={styles.navButtonText}>{label}</Text>
-//     </TouchableOpacity>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     paddingTop: 40,
-//     flex: 1,
-//     backgroundColor: '#f2f4f8',
-//     alignItems: 'center',
-//   },
-//   card: {
-//     backgroundColor: '#fff',
-//     borderRadius: 12,
-//     padding: 20,
-//     paddingTop: 36,
-//     marginBottom: 20,
-//     shadowColor: '#000',
-//     shadowOpacity: 0.08,
-//     shadowRadius: 6,
-//     elevation: 4,
-//     alignSelf: 'center',
-//     width: '90%',
-//     maxWidth: 400,
-//     alignItems: 'center',
-//     position: 'relative',
-//   },
-//   profileIcon: {
-//     position: 'absolute',
-//     top: 10,
-//     right: 10,
-//     backgroundColor: '#f0f0f0',
-//     padding: 6,
-//     borderRadius: 20,
-//   },
-//   profileEmoji: { fontSize: 20 },
-//   logo: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     color: '#2563EB',
-//     marginBottom: 4,
-//   },
-//   subtitle: { fontSize: 14, color: '#555' },
-//   date: { fontSize: 12, color: '#999', marginBottom: 20 },
-//   sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
-//   label: {
-//     fontSize: 15,
-//     color: '#111',
-//     fontWeight: '600',
-//     alignSelf: 'flex-start',
-//     marginTop: 10,
-//     marginBottom: 4,
-//   },
-//   picker: {
-//     width: '100%',
-//     height: 48,
-//     backgroundColor: '#e0e0e0',
-//     borderRadius: 6,
-//     paddingHorizontal: 8,
-//     color: '#000',
-//     marginBottom: 10,
-//   },
-//   findButton: {
-//     backgroundColor: '#2563EB',
-//     padding: 12,
-//     borderRadius: 8,
-//     alignItems: 'center',
-//     marginTop: 10,
-//     width: '100%',
-//   },
-//   findButtonText: {
-//     color: 'white',
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//   },
-//   busItem: {
-//     padding: 10,
-//     backgroundColor: '#E6F0FF',
-//     borderRadius: 6,
-//     marginVertical: 4,
-//     width: '100%',
-//   },
-//   selectedCard: {
-//     borderWidth: 2,
-//     borderColor: '#2563EB',
-//     backgroundColor: '#dceeff',
-//   },
-//   busText: {
-//     fontSize: 16,
-//     fontWeight: '600',
-//     color: '#1E40AF',
-//   },
-//   navRow: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     width: '100%',
-//     marginTop: 20,
-//   },
-//   navButton: {
-//     backgroundColor: '#f9f9f9',
-//     paddingVertical: 14,
-//     paddingHorizontal: 20,
-//     borderRadius: 10,
-//     flex: 1,
-//     alignItems: 'center',
-//     marginHorizontal: 5,
-//     elevation: 2,
-//   },
-//   navButtonText: {
-//     fontWeight: '600',
-//     color: '#2563EB',
-//   },
-//   footer: {
-//     fontSize: 12,
-//     color: '#999',
-//   },
-// });
-
-
-
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -347,11 +5,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  SafeAreaView,
+  StatusBar,
+  ActivityIndicator,
+  Dimensions,
+  Image,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import strings from '../../locales/strings';
+import Header from '../../components/Header';
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width } = Dimensions.get('window');
 
 function getTodayDate() {
   const today = new Date();
@@ -367,34 +34,62 @@ export default function HomeScreen() {
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
   const [lang, setLang] = useState<'en' | 'mr'>('en');
+  const [routesData, setRoutesData] = useState<{ source: string; destination: string }[]>([]);
   const [availableSources, setAvailableSources] = useState<string[]>([]);
-  const [availableDestinations, setAvailableDestinations] = useState<string[]>([]);
+  const [filteredDestinations, setFilteredDestinations] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingSources, setLoadingSources] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
-    const getLangAndStops = async () => {
-      const storedLang = await AsyncStorage.getItem('language');
-      setLang(storedLang === 'mr' ? 'mr' : 'en');
-
+    const fetchRoutesAndLanguage = async () => {
       try {
-        const res = await fetch('http://192.168.36.52:5000/api/routes/stops');
-        const data = await res.json();
-        setAvailableSources((data?.sources || []).sort());
-        setAvailableDestinations((data?.destinations || []).sort());
+        const storedLang = await AsyncStorage.getItem('language');
+        setLang(storedLang === 'mr' ? 'mr' : 'en');
+
+        const res = await fetch('http://10.34.28.52:5000/api/routes/all');
+        const data: { source: string; destination: string }[] = await res.json();
+
+        setRoutesData(data);
+
+        const sources = Array.from(new Set(data.map((r) => r.source))).sort();
+        setAvailableSources(sources);
+        setLoadingSources(false);
       } catch (err) {
-        console.error('❌ Error fetching stops:', err);
-        const fallback = ['Solapur', 'Pune', 'Mumbai'];
-        setAvailableSources(fallback);
-        setAvailableDestinations(fallback);
+        console.error('❌ Error fetching routes:', err);
+        setAvailableSources([]);
+        setRoutesData([]);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getLangAndStops();
+    fetchRoutesAndLanguage();
   }, []);
+
+  useEffect(() => {
+    if (source) {
+      const destinations = routesData
+        .filter((route) => route.source === source)
+        .map((route) => route.destination);
+
+      const uniqueDestinations = Array.from(new Set(destinations)).sort();
+      setFilteredDestinations(uniqueDestinations);
+      setDestination('');
+    } else {
+      setFilteredDestinations([]);
+      setDestination('');
+    }
+  }, [source, routesData]);
 
   const handleFindBuses = () => {
     if (!source || !destination || source === destination) {
-      Alert.alert(strings[lang].fillBoth);
+      Alert.alert(
+        strings[lang].fillBoth,
+        '',
+        [{ text: 'OK', style: 'default' }]
+      );
       return;
     }
 
@@ -404,113 +99,314 @@ export default function HomeScreen() {
     });
   };
 
+  const goToProfile = () => {
+    router.push('/profile');
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar backgroundColor="#1a73e8" barStyle="light-content" />
+        <Header />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#1a73e8" />
+          <Text style={styles.loadingText}>
+            {/* {strings[lang].loadingRoutes} */}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.logo}>🚌 {strings[lang].appTitle}</Text>
-        <Text style={styles.subtitle}>{strings[lang].corporation}</Text>
-        <Text style={styles.date}>{getTodayDate()}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar backgroundColor="#1a73e8" barStyle="light-content" />
 
-        <Text style={styles.sectionTitle}>{strings[lang].findBus}</Text>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={goToProfile}
+            activeOpacity={0.7}
+          >
+            <MaterialIcons name="account-circle" size={28} color="#1a73e8" />
+          </TouchableOpacity>
 
-        <Text style={styles.label}>{strings[lang].source}</Text>
-        <Picker
-          selectedValue={source}
-          onValueChange={(value) => setSource(value)}
-          style={styles.picker}
-        >
-          <Picker.Item label={strings[lang].selectSource} value="" />
-          {availableSources.map((src) => (
-            <Picker.Item key={src} label={src} value={src} />
-          ))}
-        </Picker>
+          <View style={styles.headerContainer}>
+  {/* Logo in top-left corner */}
+  <Image
+    source={require('../../assets/images/smt-logo.png')}
+    style={styles.cornerLogo}
+    resizeMode="cover"
+  />
 
-        <Text style={styles.label}>{strings[lang].destination}</Text>
-        <Picker
-          selectedValue={destination}
-          onValueChange={(value) => setDestination(value)}
-          style={styles.picker}
-        >
-          <Picker.Item label={strings[lang].selectDestination} value="" />
-          {availableDestinations.map((dst) => (
-            <Picker.Item key={dst} label={dst} value={dst} />
-          ))}
-        </Picker>
+  {/* Title in the center */}
+  <Text style={styles.title}>{strings[lang].appTitle}</Text>
 
-        <TouchableOpacity style={styles.findButton} onPress={handleFindBuses}>
-          <Text style={styles.findButtonText}>{strings[lang].findBuses}</Text>
-        </TouchableOpacity>
+  <Text style={styles.subtitle}>{strings[lang].corporation}</Text>
+  <View style={styles.dateContainer}>
+    <MaterialIcons name="calendar-today" size={16} color="#1a73e8" />
+    <Text style={styles.date}>{getTodayDate()}</Text>
+  </View>
+</View>
+
+          <View style={styles.formContainer}>
+            <Text style={styles.sectionTitle}>
+              <MaterialIcons name="search" size={22} color="#1a73e8" /> {strings[lang].findBus}
+            </Text>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.labelContainer}>
+                <MaterialIcons name="location-on" size={18} color="#5f6368" />
+                <Text style={styles.label}>{strings[lang].source}</Text>
+              </View>
+              {loadingSources ? (
+                <View style={styles.loadingPicker}>
+                  <ActivityIndicator color="#1a73e8" />
+                </View>
+              ) : (
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={source}
+                    onValueChange={(value) => setSource(value)}
+                    style={styles.picker}
+                    dropdownIconColor="#5f6368"
+                  >
+                    <Picker.Item
+                      label={strings[lang].selectSource}
+                      value=""
+                      style={styles.placeholderItem}
+                    />
+                    {availableSources.map((src) => (
+                      <Picker.Item key={src} label={src} value={src} />
+                    ))}
+                  </Picker>
+                </View>
+              )}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.labelContainer}>
+                <MaterialIcons name="location-off" size={18} color="#5f6368" />
+                <Text style={styles.label}>{strings[lang].destination}</Text>
+              </View>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={destination}
+                  onValueChange={(value) => setDestination(value)}
+                  style={styles.picker}
+                  enabled={filteredDestinations.length > 0}
+                  dropdownIconColor="#5f6368"
+                >
+                  <Picker.Item
+                    label={
+                      filteredDestinations.length === 0
+                        ? strings[lang].selectSource
+                        : strings[lang].selectDestination
+                    }
+                    value=""
+                    style={styles.placeholderItem}
+                  />
+                  {filteredDestinations.map((dst) => (
+                    <Picker.Item key={dst} label={dst} value={dst} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.findButton, (!source || !destination) && styles.disabledButton]}
+              onPress={handleFindBuses}
+              disabled={!source || !destination}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.findButtonText}>
+                <MaterialIcons name="directions-bus" size={20} color="#fff" /> {strings[lang].findBuses}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.footer}>© 2025 {strings[lang].corporation}</Text>
       </View>
-
-      <Text style={styles.footer}>© 2025 {strings[lang].corporation}</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 40,
+  safeArea: {
     flex: 1,
-    backgroundColor: '#f2f4f8',
+    backgroundColor: '#1a73e8',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
     alignItems: 'center',
+    // paddingTop: 10,
+    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 20, 
+    
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    paddingTop: 36,
+    borderRadius: 16,
+    padding: 24,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-    alignSelf: 'center',
-    width: '90%',
-    maxWidth: 400,
-    alignItems: 'center',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+    width: width > 500 ? 450 : '90%',
     position: 'relative',
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   logo: {
     fontSize: 24,
+    height: 40,
+    width: 40,
     fontWeight: 'bold',
-    color: '#2563EB',
-    marginBottom: 4,
+    color: '#1a73e8',
+    marginLeft: 8,
   },
-  subtitle: { fontSize: 14, color: '#555' },
-  date: { fontSize: 12, color: '#999', marginBottom: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
+  subtitle: {
+    fontSize: 14,
+    color: '#5f6368',
+    marginBottom: 12,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e8f0fe',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  cornerLogo: {
+  width: 60,
+  height: 60,
+  borderRadius: 25,
+
+  position: 'absolute',
+  top: -10,
+  left: -10,
+},
+
+title: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  color: '#1a73e8',
+  textAlign: 'center',
+  marginTop: 8,
+  marginBottom: 4,
+},
+
+  date: {
+    fontSize: 13,
+    color: '#1a73e8',
+    fontWeight: '500',
+    marginLeft: 6,
+  },
+  formContainer: {
+    width: '100%',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#202124',
+    marginBottom: 20,
+    textAlign: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   label: {
     fontSize: 15,
-    color: '#111',
-    fontWeight: '600',
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    marginBottom: 4,
+    color: '#3c4043',
+    fontWeight: '500',
+    marginLeft: 6,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#dadce0',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   picker: {
     width: '100%',
-    height: 48,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    color: '#000',
-    marginBottom: 10,
+    height: 50,
+    color: '#202124',
+    backgroundColor: '#fff',
+  },
+  placeholderItem: {
+    color: '#9aa0a6',
   },
   findButton: {
-    backgroundColor: '#2563EB',
-    padding: 12,
+    backgroundColor: '#1a73e8',
+    padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 10,
-    width: '100%',
+    marginTop: 16,
+    shadowColor: '#1a73e8',
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#9ab4e0',
   },
   findButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  profileButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    zIndex: 10,
   },
   footer: {
     fontSize: 12,
-    color: '#999',
+    color: '#5f6368',
+    marginTop: 'auto',
+    marginBottom: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#1a73e8',
+  },
+  loadingPicker: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f1f3f4',
+    borderRadius: 8,
   },
 });

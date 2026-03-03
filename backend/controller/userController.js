@@ -1,110 +1,57 @@
-// backend/controllers/userController.js
-// const User = require('../models/User');
+const bcrypt = require("bcrypt");
+const User = require("../models/User");
 
 // exports.registerUser = async (req, res) => {
-//   console.log('📥 Received data from frontend:', req.body); // ✅ Debug
-
-//   const { name, phone, password } = req.body;
+//   const {name, phone, password } = req.body;
 
 //   try {
-//     const newUser = new User({ name, phone, password });
-//     await newUser.save();
-
-//     console.log('✅ User saved to MongoDB:', newUser); // ✅ Debug
-
-//     res.status(201).json({ message: 'User registered successfully' });
-//   } catch (error) {
-//     console.error('❌ Error saving user:', error); // ✅ Debug
-//     res.status(500).json({ message: 'Registration failed', error });
-//   }
-// };
-
-
-
-// const User = require('../models/User');
-
-// exports.registerUser = async (req, res) => {
-//   const { name, phone, password } = req.body;
-
-//   try {
-//     // ✅ Check if user already exists
-//     const existingUser = await User.findOne({ phone, password });
-
+//     // Check if phone already exists
+//     const existingUser = await User.findOne({ phone });
 //     if (existingUser) {
-//       return res.status(400).json({ message: 'This user already exists' });
+//       return res.status(400).json({ message: "Phone number already registered" });
 //     }
 
-//     const newUser = new User({ name, phone, password });
+//     // Hash password before saving
+//     // const saltRounds = 10;
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newUser = new User({
+//       name,
+//       phone,
+//       password: hashedPassword,
+//     });
+
 //     await newUser.save();
 
-//     console.log("✅ User saved to MongoDB:", newUser);
-//     res.status(201).json({ message: 'User registered successfully' });
-
+//     res.status(201).json({ message: "User registered successfully" });
 //   } catch (error) {
-//     console.error('❌ Error saving user:', error);
-//     res.status(500).json({ message: 'Server error', error });
+//     console.error("Register error:", error);
+//     res.status(500).json({ message: "Internal server error" });
 //   }
 // };
 
 
-
-// exports.loginUser = async (req, res) => {
-//   const { phone, password } = req.body;
-
-//   try {
-//     const user = await User.findOne({ phone, password });
-
-//     if (!user) {
-//       return res.status(401).json({ message: 'User not registered' });
-//     }
-
-//     res.status(200).json({ message: 'Login successful', user });
-//   } catch (error) {
-//     console.error('❌ Login error:', error);
-//     res.status(500).json({ message: 'Login failed', error });
-//   }
-// };
-
-const User = require('../models/User');
 
 exports.registerUser = async (req, res) => {
+  console.log("Request body:", req.body);
   const { name, phone, password } = req.body;
-
   try {
-    // ✅ Check if user already exists
-    const existingUser = await User.findOne({ phone, password });
+    const existingUser = await User.findOne({ phone });
+    console.log("Existing user:", existingUser);
 
     if (existingUser) {
-      return res.status(400).json({ message: 'This user already exists' });
+      return res.status(400).json({ message: "Phone number already registered" });
     }
 
-    const newUser = new User({ name, phone, password });
-    await newUser.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log("✅ User saved to MongoDB:", newUser);
-    res.status(201).json({ message: 'User registered successfully' });
+    const newUser = new User({ name, phone, password: hashedPassword });
+    const savedUser = await newUser.save();
+    console.log("Saved user:", savedUser);
 
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error('❌ Error saving user:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-
-
-exports.loginUser = async (req, res) => {
-  const { phone, password } = req.body;
-
-  try {
-    const user = await User.findOne({ phone, password });
-
-    if (!user) {
-      return res.status(401).json({ message: 'User not registered' });
-    }
-
-    res.status(200).json({ message: 'Login successful', user });
-  } catch (error) {
-    console.error('❌ Login error:', error);
-    res.status(500).json({ message: 'Login failed', error });
+    console.error("Register error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

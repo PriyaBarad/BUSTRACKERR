@@ -1,499 +1,167 @@
-// // // // import React, { useEffect, useState } from 'react';
-// // // // import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-// // // // import MapView, { Marker } from 'react-native-maps';
-// // // // import { useLocalSearchParams } from 'expo-router';
-
-// // // // export default function LiveMapScreen() {
-// // // //   const { deviceId } = useLocalSearchParams();
-// // // //   const resolvedDeviceId = Array.isArray(deviceId) ? deviceId[0] : deviceId;
-
-// // // //   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-// // // //   const [loading, setLoading] = useState(true);
-
-// // // //   const defaultRegion = {
-// // // //     latitude: 17.6599,
-// // // //     longitude: 75.9064,
-// // // //     latitudeDelta: 0.05,
-// // // //     longitudeDelta: 0.05,
-// // // //   };
-
-// // // //   useEffect(() => {
-// // // //     const fetchLocation = async () => {
-// // // //       try {
-// // // //         const response = await fetch(`http://192.168.36.52:5000/api/gps/${resolvedDeviceId}`);
-// // // //         const text = await response.text();
-
-// // // //         // Try to parse JSON
-// // // //         let data;
-// // // //         try {
-// // // //           data = JSON.parse(text);
-// // // //         } catch (jsonError) {
-// // // //           console.error("❌ JSON parse failed. Possibly received HTML:", text.slice(0, 100));
-// // // //           Alert.alert("Error", "Received unexpected response while fetching location.");
-// // // //           return;
-// // // //         }
-
-// // // //         console.log("📍 GPS API response:", data);
-
-// // // //         if (data.latitude && data.longitude) {
-// // // //           setLocation({ latitude: data.latitude, longitude: data.longitude });
-// // // //         } else {
-// // // //           Alert.alert("Warning", "Live location not found. Showing default map.");
-// // // //         }
-// // // //       } catch (error) {
-// // // //         console.error("❌ Fetch error:", (error as Error).message);
-// // // //         Alert.alert("Error", "Failed to fetch location.");
-// // // //       } finally {
-// // // //         setLoading(false); // Always show map after fetch attempt
-// // // //       }
-// // // //     };
-
-// // // //     if (resolvedDeviceId) {
-// // // //       fetchLocation();
-// // // //     } else {
-// // // //       console.warn("⚠️ No deviceId passed to map screen.");
-// // // //       setLoading(false); // Show map even if deviceId is missing
-// // // //     }
-// // // //   }, [resolvedDeviceId]);
-
-// // // //   const mapRegion = location
-// // // //     ? {
-// // // //         ...location,
-// // // //         latitudeDelta: 0.01,
-// // // //         longitudeDelta: 0.01,
-// // // //       }
-// // // //     : defaultRegion;
-
-// // // //   return (
-// // // //     <View style={styles.container}>
-// // // //       {loading && (
-// // // //         <View style={styles.overlay}>
-// // // //           <ActivityIndicator size="large" color="#0000ff" />
-// // // //         </View>
-// // // //       )}
-
-// // // //       <MapView style={styles.map} initialRegion={mapRegion}>
-// // // //         {location && (
-// // // //           <Marker
-// // // //             coordinate={location}
-// // // //             title="Bus Location"
-// // // //             description={`Device ID: ${resolvedDeviceId}`}
-// // // //           />
-// // // //         )}
-// // // //       </MapView>
-// // // //     </View>
-// // // //   );
-// // // // }
-
-// // // // const styles = StyleSheet.create({
-// // // //   container: {
-// // // //     flex: 1,
-// // // //   },
-// // // //   map: {
-// // // //     flex: 1,
-// // // //   },
-// // // //   overlay: {
-// // // //     ...StyleSheet.absoluteFillObject,
-// // // //     justifyContent: 'center',
-// // // //     alignItems: 'center',
-// // // //     backgroundColor: 'rgba(255,255,255,0.6)',
-// // // //     zIndex: 1,
-// // // //   },
-// // // // });
-
-
-
-
-
-
-// // // import React, { useEffect, useState } from 'react';
-// // // import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-// // // import MapView, { Marker } from 'react-native-maps';
-// // // import { useLocalSearchParams } from 'expo-router';
-
-// // // export default function LiveMapScreen() {
-// // //   const { deviceId } = useLocalSearchParams();
-// // //   const resolvedDeviceId = Array.isArray(deviceId) ? deviceId[0] : deviceId;
-
-// // //   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-// // //   const [loading, setLoading] = useState(true);
-
-// // //   const defaultRegion = {
-// // //     latitude: 17.6599,
-// // //     longitude: 75.9064,
-// // //     latitudeDelta: 0.05,
-// // //     longitudeDelta: 0.05,
-// // //   };
-
-// // //   useEffect(() => {
-// // //     const fetchLocation = async () => {
-// // //       try {
-// // //         const response = await fetch(`http://192.168.36.52:5000/api/gps/${resolvedDeviceId}`);
-// // //         const data = await response.json();
-// // //         console.log("📍 GPS Data:", data);
-
-// // //         let { latitude, longitude } = data;
-
-// // //         // Auto-correct reversed lat/lng
-// // //         if (latitude > 50) {
-// // //           [latitude, longitude] = [longitude, latitude];
-// // //         }
-
-// // //         if (latitude && longitude) {
-// // //           setLocation({ latitude, longitude });
-// // //         }
-
-// // //       } catch (error) {
-// // //         console.error("❌ Fetch error:", (error as Error).message);
-// // //       } finally {
-// // //         setLoading(false);
-// // //       }
-// // //     };
-
-// // //     // Initial fetch
-// // //     fetchLocation();
-
-// // //     // Auto-refresh every 5 seconds
-// // //     const intervalId = setInterval(fetchLocation, 5000);
-
-// // //     // Cleanup interval on unmount
-// // //     return () => clearInterval(intervalId);
-// // //   }, [resolvedDeviceId]);
-
-// // //   if (loading && !location) {
-// // //     return (
-// // //       <View style={styles.center}>
-// // //         <ActivityIndicator size="large" color="#0000ff" />
-// // //       </View>
-// // //     );
-// // //   }
-
-// // //   const mapRegion = location
-// // //     ? {
-// // //         ...location,
-// // //         latitudeDelta: 0.01,
-// // //         longitudeDelta: 0.01,
-// // //       }
-// // //     : defaultRegion;
-
-// // //   return (
-// // //     <MapView style={styles.map} initialRegion={mapRegion}>
-// // //       {location && (
-// // //         <Marker
-// // //           coordinate={location}
-// // //           title="Bus Location"
-// // //           description={`Device ID: ${resolvedDeviceId}`}
-// // //         />
-// // //       )}
-// // //     </MapView>
-// // //   );
-// // // }
-
-// // // const styles = StyleSheet.create({
-// // //   map: {
-// // //     flex: 1,
-// // //   },
-// // //   center: {
-// // //     flex: 1,
-// // //     justifyContent: 'center',
-// // //     alignItems: 'center',
-// // //   },
-// // // });
-
-
-
-
-
-
-
-// // import React, { useEffect, useState } from 'react';
-// // import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-// // import MapView, { Marker } from 'react-native-maps';
-// // import { useLocalSearchParams } from 'expo-router';
-
-// // export default function LiveMapScreen() {
-// //   const { deviceId } = useLocalSearchParams();
-// //   const resolvedDeviceId = Array.isArray(deviceId) ? deviceId[0] : deviceId;
-
-// //   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-// //   const [loading, setLoading] = useState(true);
-
-// //   const defaultRegion = {
-// //     latitude: 17.6599,
-// //     longitude: 75.9064,
-// //     latitudeDelta: 0.05,
-// //     longitudeDelta: 0.05,
-// //   };
-
-// //   useEffect(() => {
-// //     const fetchLocation = async () => {
-// //       try {
-// //         const response = await fetch(`http://10.1.65.155:5000/api/gps/${resolvedDeviceId}`);
-// //         const data = await response.json();
-// //         console.log("📍 GPS Data:", data);
-
-// //         const { latitude, longitude } = data;
-
-// //         if (latitude && longitude) {
-// //           setLocation({ latitude, longitude });
-// //         } else {
-// //           Alert.alert("Invalid GPS", "No location found for this bus.");
-// //         }
-
-// //       } catch (error) {
-// //         console.error("❌ Fetch error:", (error as Error).message);
-// //         Alert.alert("Error", "Could not fetch location.");
-// //       } finally {
-// //         setLoading(false);
-// //       }
-// //     };
-
-// //     fetchLocation();
-
-// //     const interval = setInterval(fetchLocation, 5000);
-
-// //     return () => clearInterval(interval);
-// //   }, [resolvedDeviceId]);
-
-// //   if (loading && !location) {
-// //     return (
-// //       <View style={styles.center}>
-// //         <ActivityIndicator size="large" color="#0000ff" />
-// //       </View>
-// //     );
-// //   }
-
-// //   const mapRegion = location
-// //     ? {
-// //         ...location,
-// //         latitudeDelta: 0.01,
-// //         longitudeDelta: 0.01,
-// //       }
-// //     : defaultRegion;
-
-// //   return (
-// //     <MapView style={styles.map} initialRegion={mapRegion}>
-// //       {location && (
-// //         <Marker
-// //           coordinate={location}
-// //           title="Bus Location"
-// //           description={`Device ID: ${resolvedDeviceId}`}
-// //         />
-// //       )}
-// //     </MapView>
-// //   );
-// // }
-
-// // const styles = StyleSheet.create({
-// //   map: {
-// //     flex: 1,
-// //   },
-// //   center: {
-// //     flex: 1,
-// //     justifyContent: 'center',
-// //     alignItems: 'center',
-// //   },
-// // });
-
-
-
-
-
-
 
 // import React, { useEffect, useRef, useState } from 'react';
-// import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-// import MapView, { Marker } from 'react-native-maps';
-// import { useLocalSearchParams } from 'expo-router';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   ActivityIndicator,
+//   Alert,
+//   TouchableOpacity,
+//   Animated,
+// } from 'react-native';
+// import MapView, { MarkerAnimated } from 'react-native-maps';
+// import { useLocalSearchParams, useRouter } from 'expo-router';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import axios from 'axios';
 
-// export default function LiveMapScreen() {
-//   const { deviceId } = useLocalSearchParams();
+// export default function MapScreen() {
+//   const { busNumber, deviceId, source, via, destination } = useLocalSearchParams();
+
+//   // Resolve possible array values from params
+//   const resolvedBusNumber = Array.isArray(busNumber) ? busNumber[0] : busNumber;
 //   const resolvedDeviceId = Array.isArray(deviceId) ? deviceId[0] : deviceId;
+//   const resolvedSource = Array.isArray(source) ? source[0] : source;
+//   const resolvedVia = Array.isArray(via) ? via[0] : via;
+//   const resolvedDestination = Array.isArray(destination) ? destination[0] : destination;
 
-//   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 //   const [loading, setLoading] = useState(true);
+//   const [hasData, setHasData] = useState(false);
 //   const mapRef = useRef<MapView>(null);
+//   const router = useRouter();
+
+//   // Animated values for latitude and longitude
+//   const latitude = useRef(new Animated.Value(17.6599)).current;
+//   const longitude = useRef(new Animated.Value(75.9064)).current;
+
+//   const defaultRegion = {
+//     latitude: 17.6599,
+//     longitude: 75.9064,
+//     latitudeDelta: 0.05,
+//     longitudeDelta: 0.05,
+//   };
 
 //   useEffect(() => {
 //     const fetchLocation = async () => {
 //       try {
-//         const response = await fetch(`http://10.1.65.155:5000/api/gps/${resolvedDeviceId}`);
-//         const data = await response.json();
-//         console.log("📍 GPS Data:", data);
+//         const res = await axios.get(`http://10.34.28.52:5000/api/routes/location/${resolvedBusNumber}`);
+//         const { lat, lng } = res.data;
 
-//         const { latitude, longitude } = data;
+//         if (!isNaN(lat) && !isNaN(lng)) {
+//           setHasData(true);
 
-//         if (latitude && longitude) {
-//           const newLocation = { latitude, longitude };
-//           setLocation(newLocation);
+//           Animated.timing(latitude, {
+//             toValue: lat,
+//             duration: 1000,
+//             useNativeDriver: false,
+//           }).start();
 
-//           // Animate the map to new location
-//           if (mapRef.current) {
-//             mapRef.current.animateToRegion({
-//               ...newLocation,
-//               latitudeDelta: 0.01,
-//               longitudeDelta: 0.01,
-//             }, 1000);
-//           }
+//           Animated.timing(longitude, {
+//             toValue: lng,
+//             duration: 1000,
+//             useNativeDriver: false,
+//           }).start();
+
+//           mapRef.current?.animateToRegion({
+//             latitude: lat,
+//             longitude: lng,
+//             latitudeDelta: 0.01,
+//             longitudeDelta: 0.01,
+//           }, 1000);
 //         } else {
-//           Alert.alert("Invalid GPS", "No location found for this bus.");
+//           setHasData(false);
 //         }
-
-//       } catch (error) {
-//         console.error("❌ Fetch error:", (error as Error).message);
-//         Alert.alert("Error", "Could not fetch location.");
+//       } catch (err) {
+//         console.error('❌ Failed to fetch location:', err);
+//         Alert.alert('Error fetching GPS location');
+//         setHasData(false);
 //       } finally {
 //         setLoading(false);
 //       }
 //     };
 
-//     fetchLocation();
-//     const interval = setInterval(fetchLocation, 5000); // Refresh every 5 seconds
-//     return () => clearInterval(interval);
-//   }, [resolvedDeviceId]);
-
-//   if (loading && !location) {
-//     return (
-//       <View style={styles.center}>
-//         <ActivityIndicator size="large" color="#0000ff" />
-//       </View>
-//     );
-//   }
+//     if (resolvedBusNumber) {
+//       fetchLocation();
+//       const interval = setInterval(fetchLocation, 10000);
+//       return () => clearInterval(interval);
+//     }
+//   }, [resolvedBusNumber]);
 
 //   return (
-//     <MapView
-//       ref={mapRef}
-//       style={styles.map}
-//       region={
-//         location
-//           ? {
-//               ...location,
-//               latitudeDelta: 0.01,
-//               longitudeDelta: 0.01,
-//             }
-//           : undefined
-//       }
-//     >
-//       {location && (
-//         <Marker
-//           coordinate={location}
-//           title="Bus Location"
-//           description={`Device ID: ${resolvedDeviceId}`}
-//         />
+//     <SafeAreaView style={styles.container}>
+//       <MapView
+//         ref={mapRef}
+//         style={styles.map}
+//         initialRegion={defaultRegion}
+//       >
+//         {hasData && (
+//           <MarkerAnimated
+//             coordinate={{
+//               latitude: latitude as unknown as number,
+//               longitude: longitude as unknown as number,
+//             }}
+//             title="Bus Location"
+//             description={`Bus Number: ${resolvedBusNumber}`}
+//           />
+//         )}
+//       </MapView>
+
+//       {!hasData && !loading && (
+//         <Text style={styles.noData}>No live location found</Text>
 //       )}
-//     </MapView>
+
+//       {loading && (
+//         <ActivityIndicator size="large" color="blue" style={styles.loader} />
+//       )}
+
+//       <TouchableOpacity
+//         style={styles.routeButton}
+//         onPress={() =>
+//           router.push({
+//             pathname: '/verticalMap',
+//             params: { 
+//               busNumber: resolvedBusNumber,
+//               deviceId: resolvedDeviceId,
+//               source: resolvedSource,
+//               via: resolvedVia,
+//               destination: resolvedDestination,
+//             },
+//           })
+//         }
+//       >
+//         <Text style={styles.buttonText}>📍 Show Route</Text>
+//       </TouchableOpacity>
+//     </SafeAreaView>
 //   );
 // }
 
 // const styles = StyleSheet.create({
-//   map: {
-//     flex: 1,
+//   container: { flex: 1 },
+//   map: { flex: 1 },
+//   loader: {
+//     position: 'absolute',
+//     top: '50%',
+//     alignSelf: 'center',
 //   },
-//   center: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
+//   noData: {
+//     position: 'absolute',
+//     top: 20,
+//     alignSelf: 'center',
+//     backgroundColor: '#fff',
+//     padding: 6,
+//     borderRadius: 6,
+//     color: '#888',
+//   },
+//   routeButton: {
+//     position: 'absolute',
+//     bottom: 20,
+//     left: 20,
+//     backgroundColor: '#fff',
+//     padding: 10,
+//     borderRadius: 8,
+//     elevation: 4,
+//   },
+//   buttonText: {
+//     color: '#2563EB',
+//     fontWeight: '600',
 //   },
 // });
-
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-
-export default function LiveMapScreen() {
-  const { deviceId, busNumber } = useLocalSearchParams();
-  const resolvedDeviceId = Array.isArray(deviceId) ? deviceId[0] : deviceId;
-  const resolvedBusNumber = Array.isArray(busNumber) ? busNumber[0] : busNumber;
-
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!resolvedDeviceId) return;
-
-    const fetchLocation = async () => {
-      try {
-        const res = await fetch(`http://192.168.36.52:5000/api/gps/${resolvedDeviceId}`);
-        const data = await res.json();
-
-        if (!data || !data.latitude || !data.longitude) {
-          Alert.alert('No GPS data found for this device');
-        } else {
-          setLocation({ latitude: data.latitude, longitude: data.longitude });
-        }
-      } catch (error) {
-        console.error('❌ Error fetching GPS location:', error);
-        Alert.alert('Error fetching GPS data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLocation();
-  }, [resolvedDeviceId]);
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="blue" style={{ flex: 1, justifyContent: 'center' }} />;
-  }
-
-  return (
-    <View style={styles.container}>
-      {location ? (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-        >
-          <Marker coordinate={location} title="Bus Location" />
-        </MapView>
-      ) : (
-        <Text style={styles.noData}>No location data found.</Text>
-      )}
-
-      {/* Button to Navigate to verticalMap */}
-      <TouchableOpacity
-        style={styles.routeButton}
-        onPress={() => router.push({ pathname: '/verticalMap', params: { busNumber: resolvedBusNumber } })}
-      >
-        <Text style={styles.buttonText}>📍 Show Route</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  noData: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#999',
-  },
-  routeButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  buttonText: {
-    color: '#2563EB',
-    fontWeight: '600',
-  },
-});
