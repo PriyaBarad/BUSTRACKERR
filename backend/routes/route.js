@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose"); // removed unused import
 
 const Route = require('../models/Route');
 const BusRoute = require('../models/BusRoute');

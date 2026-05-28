@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  SafeAreaView,
-  StatusBar,
-  ActivityIndicator,
-  Dimensions,
-  Image,
-} from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import strings from '../../locales/strings';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Header from '../../components/Header';
-import { MaterialIcons } from '@expo/vector-icons';
+import strings from '../../locales/strings';
 
 const { width } = Dimensions.get('window');
 
@@ -48,7 +48,7 @@ export default function HomeScreen() {
         const storedLang = await AsyncStorage.getItem('language');
         setLang(storedLang === 'mr' ? 'mr' : 'en');
 
-        const res = await fetch('http://10.34.28.52:5000/api/routes/all');
+        const res = await fetch('http://10.16.129.6:5000/api/routes/all');
         const data: { source: string; destination: string }[] = await res.json();
 
         setRoutesData(data);
@@ -107,12 +107,8 @@ export default function HomeScreen() {
     return (
       <SafeAreaView style={styles.safeArea}>
         <StatusBar backgroundColor="#1a73e8" barStyle="light-content" />
-        <Header />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#1a73e8" />
-          <Text style={styles.loadingText}>
-            {/* {strings[lang].loadingRoutes} */}
-          </Text>
         </View>
       </SafeAreaView>
     );
@@ -133,22 +129,22 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <View style={styles.headerContainer}>
-  {/* Logo in top-left corner */}
-  <Image
-    source={require('../../assets/images/smt-logo.png')}
-    style={styles.cornerLogo}
-    resizeMode="cover"
-  />
+            {/* Logo centered above title */}
+            <Image
+              source={require('../../assets/images/smt-logo.png')}
+              style={styles.centerLogo}
+              resizeMode="cover"
+            />
 
-  {/* Title in the center */}
-  <Text style={styles.title}>{strings[lang].appTitle}</Text>
+            {/* Title in the center */}
+            <Text style={styles.title}>{strings[lang].appTitle}</Text>
 
-  <Text style={styles.subtitle}>{strings[lang].corporation}</Text>
-  <View style={styles.dateContainer}>
-    <MaterialIcons name="calendar-today" size={16} color="#1a73e8" />
-    <Text style={styles.date}>{getTodayDate()}</Text>
-  </View>
-</View>
+            <Text style={styles.subtitle}>{strings[lang].corporation}</Text>
+            <View style={styles.dateContainer}>
+              <MaterialIcons name="calendar-today" size={16} color="#1a73e8" />
+              <Text style={styles.date}>{getTodayDate()}</Text>
+            </View>
+          </View>
 
           <View style={styles.formContainer}>
             <Text style={styles.sectionTitle}>
@@ -227,7 +223,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <Text style={styles.footer}>© 2025 {strings[lang].corporation}</Text>
+        <Text style={styles.footer}>Powered by MIT Vishwaprayag University</Text>
       </View>
     </SafeAreaView>
   );
@@ -243,8 +239,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
     alignItems: 'center',
     // paddingTop: 10,
-    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 20, 
-    
+    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 20,
+
   },
   card: {
     backgroundColor: '#fff',
@@ -289,24 +285,21 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 12,
   },
-  cornerLogo: {
-  width: 60,
-  height: 60,
-  borderRadius: 25,
+  centerLogo: {
+    width: 150,
+    height: 150,
+    borderRadius: 40,
+    marginBottom: 8,
+  },
 
-  position: 'absolute',
-  top: -10,
-  left: -10,
-},
-
-title: {
-  fontSize: 24,
-  fontWeight: 'bold',
-  color: '#1a73e8',
-  textAlign: 'center',
-  marginTop: 8,
-  marginBottom: 4,
-},
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 4,
+  },
 
   date: {
     fontSize: 13,

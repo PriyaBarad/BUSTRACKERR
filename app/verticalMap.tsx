@@ -1682,7 +1682,7 @@ export default function VerticalMap() {
       
       setLoading(true);
       try {
-        const response = await axios.get(`http://10.34.28.52:5000/api/routes/trips/${busNumber}`);
+        const response = await axios.get(`http://10.16.129.6:5000/api/routes/trips/${busNumber}`);
         
         const tripsData = response.data?.trips || response.data || [];
         
@@ -1761,7 +1761,7 @@ export default function VerticalMap() {
         setLocationLoading(true);
         setLocationError(null);
         
-        const locationRes = await axios.get(`http://10.34.28.52:5000/api/routes/location/${busNumber}`);
+        const locationRes = await axios.get(`http://10.16.129.6:5000/api/routes/location/${busNumber}`);
         
         if (!isMounted) return;
         

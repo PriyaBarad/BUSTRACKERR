@@ -16,7 +16,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import strings from '../locales/strings';
-import Header from '../components/Header';
+
 import { MaterialIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
@@ -96,7 +96,7 @@ export default function RegisterScreen() {
 
     setIsLoading(true);
     try {
-      const API_URL = 'http://10.34.28.52:5000/api/users/register';
+      const API_URL = 'http://10.16.129.6:5000/api/users/register';
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -168,7 +168,7 @@ export default function RegisterScreen() {
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
         >
-          <Header />
+
           
           <View style={styles.container}>
             <View style={styles.content}>
@@ -320,48 +320,46 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
+    justifyContent: 'center',
   },
   container: {
-    width: width > 500 ? 450 : '90%',
+    width: width > 500 ? 420 : '88%',
     alignSelf: 'center',
     backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 25,
+    borderRadius: 14,
+    padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 10,
-    marginVertical: 20,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 8,
+    marginVertical: 10,
   },
   logo: {
-  width: 100,
-  height: 100,
-  borderRadius: 50, // half of width/height for perfect circle
-  borderWidth: 2, // optional
-  borderColor: '#000000ff', // optional
-},
+    width: 150,
+    height: 150,
+  },
   content: {
     width: '100%',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 10,
   },
   title: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '700',
     color: '#495057',
-    marginTop: 15,
+    marginTop: 8,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 13,
     color: '#6C757D',
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: 16,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
-    lineHeight: 24,
+    lineHeight: 20,
   },
   formContainer: {
     width: '100%',
@@ -371,8 +369,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f8f9fa',
     borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 20,
+    paddingHorizontal: 12,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e9ecef',
   },
@@ -381,8 +379,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 50,
-    fontSize: 16,
+    height: 44,
+    fontSize: 15,
     color: '#495057',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
@@ -391,10 +389,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#6C63FF',
-    paddingVertical: 15,
+    paddingVertical: 12,
     borderRadius: 10,
     width: '100%',
-    marginTop: 10,
+    marginTop: 6,
     shadowColor: '#6C63FF',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -412,7 +410,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   footer: {
-    marginTop: 30,
+    marginTop: 16,
     alignItems: 'center',
   },
   footerText: {

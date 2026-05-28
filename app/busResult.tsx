@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-  Platform,
-  SafeAreaView,
-} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import Header from '../components/Header';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface BusResult {
   busNumber: string;
@@ -50,7 +50,7 @@ const BusResultScreen = () => {
   const fetchBusData = async () => {
     try {
       const response = await axios.get<BusResult[]>(
-        'http://10.34.28.52:5000/api/routes/busroutes',
+        'http://10.16.129.6:5000/api/routes/busroutes',
         { params: { source, destination } }
       );
       setResults(response.data);
@@ -85,7 +85,7 @@ const BusResultScreen = () => {
       }
 
       const response = await axios.get(
-        'http://10.34.28.52:5000/api/routes/device-from-bus',
+        'http://10.16.129.6:5000/api/routes/device-from-bus',
         { params: { busNumber: selectedData.busNumber.trim() } }
       );
 
@@ -136,19 +136,19 @@ const BusResultScreen = () => {
             </View>
           )}
         </View>
-        
+
         <View style={styles.routeContainer}>
           <View style={styles.locationDot}>
             <Ionicons name="ellipse" size={8} color="#E53935" />
           </View>
           <Text style={styles.routeText}>{item.source}</Text>
         </View>
-        
+
         <View style={styles.viaContainer}>
           <View style={styles.dottedLine} />
           <Text style={styles.viaText}>Via {item.via}</Text>
         </View>
-        
+
         <View style={styles.routeContainer}>
           <View style={styles.locationDot}>
             <Ionicons name="ellipse" size={8} color="#43A047" />
@@ -169,82 +169,88 @@ const BusResultScreen = () => {
   };
 
   return (
-  <SafeAreaView style={styles.safeArea}>
-    
+    <SafeAreaView style={styles.safeArea}>
 
-    <View style={styles.container}>
-      <FlatList
-        data={loading ? [] : results}
-        keyExtractor={(item) => item.busNumber}
-        renderItem={renderItem}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => router.push('/home')}
-              activeOpacity={0.6}
-            >
-              <Ionicons name="arrow-back" size={20} color="#FFF" />
-              <Text style={styles.backButtonText}></Text>
-            </TouchableOpacity>
-
-            <View style={styles.headerContainer}>
-              <Text style={styles.title}>Available Buses</Text>
-              <Text style={styles.subtitle}>
-                {source} → {destination}
-              </Text>
-            </View>
-
-            {loading && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#3A7FC4" />
-                <Text style={styles.loadingText}>Finding buses...</Text>
-              </View>
-            )}
-
-            {!loading && results.length === 0 && (
-              <View style={styles.emptyContainer}>
-                <View style={styles.emptyIcon}>
-                  <Ionicons name="bus-outline" size={48} color="#A3B8D8" />
-                </View>
-                <Text style={styles.emptyText}>No buses found for this route</Text>
-                <TouchableOpacity
-                  style={styles.refreshButton}
-                  onPress={handleRefresh}
-                >
-                  <Ionicons name="refresh" size={20} color="#FFF" />
-                  <Text style={styles.refreshText}>Try Again</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            {!loading && results.length > 0 && (
-              <Text style={styles.resultsCount}>{results.length} buses found</Text>
-            )}
-          </>
-        }
-      />
-
-      {/* Fixed bottom buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.verticalMapButton]}
-          onPress={() => fetchDeviceAndNavigate('verticalMap')}
-          disabled={!selectedBus}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="map-outline" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Route View</Text>
-        </TouchableOpacity>
-
-       
+      <View style={styles.topHeader}>
+        <Image source={require('../assets/images/smt-logo.png')} style={styles.topLogo} />
+        <Text style={styles.topAppName}>Track My Bus</Text>
+        <View style={{ width: 40 }} />
       </View>
-    </View>
-  </SafeAreaView>
-);
+
+      <View style={styles.container}>
+        <FlatList
+          data={loading ? [] : results}
+          keyExtractor={(item) => item.busNumber}
+          renderItem={renderItem}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          contentContainerStyle={styles.listContent}
+          ListHeaderComponent={
+            <>
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => router.push('/home')}
+                activeOpacity={0.6}
+              >
+                <Ionicons name="arrow-back" size={20} color="#FFF" />
+                <Text style={styles.backButtonText}></Text>
+              </TouchableOpacity>
+
+              <View style={styles.headerContainer}>
+                <Text style={styles.title}>Available Buses</Text>
+                <Text style={styles.subtitle}>
+                  {source} → {destination}
+                </Text>
+              </View>
+
+              {loading && (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="#3A7FC4" />
+                  <Text style={styles.loadingText}>Finding buses...</Text>
+                </View>
+              )}
+
+              {!loading && results.length === 0 && (
+                <View style={styles.emptyContainer}>
+                  <View style={styles.emptyIcon}>
+                    <Ionicons name="bus-outline" size={48} color="#A3B8D8" />
+                  </View>
+                  <Text style={styles.emptyText}>No buses found for this route</Text>
+                  <TouchableOpacity
+                    style={styles.refreshButton}
+                    onPress={handleRefresh}
+                  >
+                    <Ionicons name="refresh" size={20} color="#FFF" />
+                    <Text style={styles.refreshText}>Try Again</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {!loading && results.length > 0 && (
+                <Text style={styles.resultsCount}>{results.length} buses found</Text>
+              )}
+            </>
+          }
+        />
+
+        {/* Fixed bottom buttons */}
+        <View style={styles.buttonContainer}>
+          <View style={{ flexDirection: 'row', width: '100%' }}>
+            <TouchableOpacity
+              style={[styles.actionButton, styles.verticalMapButton]}
+              onPress={() => fetchDeviceAndNavigate('verticalMap')}
+              disabled={!selectedBus}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="map-outline" size={20} color="#FFF" />
+              <Text style={styles.buttonText}>Route View</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.bottomFooter}>Powered by MIT Vishwaprayag University</Text>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 
 };
 
@@ -253,7 +259,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#2A5C8D',
   },
-   container: {
+  topHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'android' ? 10 : 0,
+    paddingBottom: 10,
+    backgroundColor: '#2A5C8D',
+  },
+  topLogo: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  topAppName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  container: {
     flex: 1,
     backgroundColor: '#F5F7FB',
     borderTopLeftRadius: 5,
@@ -263,15 +288,15 @@ const styles = StyleSheet.create({
   },
   backButton: {
     top: 10,
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: 5,
-  marginLeft: 4, // was 10
-  alignSelf: 'flex-start',
-  backgroundColor: 'rgba(28, 114, 195, 1)',
-  borderRadius: 20,
-  paddingHorizontal: 12,
-},
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    marginLeft: 4, // was 10
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(28, 114, 195, 1)',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+  },
   backButtonText: {
     fontSize: 16,
     color: '#192536ff',
@@ -288,14 +313,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#2C3E50',
     marginBottom: 4,
-    left : -15,
+    left: -15,
   },
   subtitle: {
     top: 2,
     fontSize: isTablet ? 18 : 16,
     color: '#5E7EB6',
     fontWeight: '500',
-    left : -15,
+    left: -15,
   },
   loadingContainer: {
     flex: 1,
@@ -455,24 +480,30 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   buttonContainer: {
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 16,
-  backgroundColor: '#FFF',
-  borderTopWidth: 1,
-  borderTopColor: '#ECF0F1',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  paddingBottom: Platform.select({ ios: 30, android: 16 }),
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: -2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 8,
-  elevation: 10,
-},
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#FFF',
+    borderTopWidth: 1,
+    borderTopColor: '#ECF0F1',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingBottom: Platform.select({ ios: 30, android: 16 }),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  bottomFooter: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#7F8C8D',
+    marginTop: 10,
+  },
 
   actionButton: {
     flex: 1,

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BUSTRACKERR – User Workflow Block Diagram</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: #111;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 4px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    svg {
+      display: block;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+
+    /* box styles */
+    .box rect {
+      stroke-width: 1.5;
+      rx: 4;
+    }
+    .box text {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      fill: #111;
+    }
+    .box text.small {
+      font-size: 9.5px;
+      fill: #555;
+    }
+    .box text.api {
+      font-family: Consolas, monospace;
+      font-size: 9px;
+      fill: #1a56a0;
+    }
+    .arrow line, .arrow path {
+      stroke: #555;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .arrow-label {
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      fill: #333;
+    }
+    .db-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      fill: #155724;
+      font-weight: bold;
+    }
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      fill: #888;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<h2>BUSTRACKERR — User Workflow Block Diagram</h2>
+<div class="subtitle">Solapur City Bus Tracker App &nbsp;|&nbsp; React Native (Expo) + Node.js Express + MongoDB</div>
+
+<svg width="1100" height="920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Arrowhead -->
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1a56a0"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#155724"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#a00"/>
+    </marker>
+  </defs>
+
+  <!-- ════════════════════════════════════════════
+       SECTION LABELS
+  ════════════════════════════════════════════ -->
+  <text x="16" y="72" class="section-label">① Entry</text>
+  <text x="16" y="202" class="section-label">② Auth</text>
+  <text x="16" y="372" class="section-label">③ Home</text>
+  <text x="16" y="532" class="section-label">④ Search</text>
+  <text x="16" y="682" class="section-label">⑤ Track</text>
+  <text x="16" y="830" class="section-label">⑥ DB</text>
+
+  <!-- Horizontal dividers -->
+  <line x1="70" y1="80" x2="1080" y2="80" stroke="#ddd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="70" y1="215" x2="1080" y2="215" stroke="#ddd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="70" y1="385" x2="1080" y2="385" stroke="#ddd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="70" y1="545" x2="1080" y2="545" stroke="#ddd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="70" y1="695" x2="1080" y2="695" stroke="#ddd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ════════════════════════════════════════════
+       ROW 1: APP LAUNCH → LANGUAGE SELECT
+  ════════════════════════════════════════════ -->
+
+  <!-- App Launch box -->
+  <rect x="90" y="90" width="130" height="50" rx="5" fill="#e8f0fe" stroke="#4a6cf7"/>
+  <text x="155" y="111" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">App Launch</text>
+  <text x="155" y="127" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">Expo / React Native</text>
+
+  <!-- Arrow: Launch → Language -->
+  <line x1="220" y1="115" x2="278" y2="115" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Language Select box -->
+  <rect x="280" y="90" width="160" height="60" rx="5" fill="#fff9e6" stroke="#d97706"/>
+  <text x="360" y="111" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Language Selection</text>
+  <text x="360" y="126" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/(tabs)/index.tsx</text>
+  <text x="360" y="140" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">English / मराठी → AsyncStorage</text>
+
+  <!-- Arrow: Language → Login -->
+  <line x1="360" y1="150" x2="360" y2="223" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="365" y="190" font-family="Arial" font-size="9" fill="#333">select language</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 2: AUTHENTICATION
+  ════════════════════════════════════════════ -->
+
+  <!-- Login box -->
+  <rect x="250" y="225" width="180" height="75" rx="5" fill="#e8f4fd" stroke="#2563eb"/>
+  <text x="340" y="246" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Login Screen</text>
+  <text x="340" y="261" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/login.tsx</text>
+  <text x="340" y="275" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">POST /api/users/login</text>
+  <text x="340" y="289" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">{ phone, password } → JWT/session</text>
+
+  <!-- Register box -->
+  <rect x="560" y="225" width="180" height="75" rx="5" fill="#e8f4fd" stroke="#2563eb"/>
+  <text x="650" y="246" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Register Screen</text>
+  <text x="650" y="261" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/register.tsx</text>
+  <text x="650" y="275" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">POST /api/users/register</text>
+  <text x="650" y="289" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">{ name, phone, password }</text>
+
+  <!-- Arrow: Login ↔ Register -->
+  <line x1="430" y1="252" x2="558" y2="252" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <text x="476" y="246" font-family="Arial" font-size="9" fill="#2563eb">No account?</text>
+  <line x1="558" y1="268" x2="430" y2="268" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <text x="476" y="282" font-family="Arial" font-size="9" fill="#2563eb">Back to login</text>
+
+  <!-- Arrow: Login → Home -->
+  <line x1="340" y1="300" x2="340" y2="393" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="345" y="352" font-family="Arial" font-size="9" fill="#333">login success</text>
+  <text x="345" y="365" font-family="Arial" font-size="9" fill="#888">saves 'userLoggedIn'</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 3: HOME SCREEN (tabs)
+  ════════════════════════════════════════════ -->
+
+  <!-- Home Search tab -->
+  <rect x="200" y="395" width="200" height="75" rx="5" fill="#f3f0ff" stroke="#7c3aed"/>
+  <text x="300" y="416" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Home / Search Tab</text>
+  <text x="300" y="431" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/home/index.tsx</text>
+  <text x="300" y="445" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">GET /api/routes/all</text>
+  <text x="300" y="459" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Pick source → auto-filter destination</text>
+
+  <!-- Profile tab -->
+  <rect x="600" y="395" width="200" height="75" rx="5" fill="#e0f7fa" stroke="#0284c7"/>
+  <text x="700" y="416" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Profile Tab</text>
+  <text x="700" y="431" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/profile.tsx</text>
+  <text x="700" y="445" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">View name / phone</text>
+  <text x="700" y="459" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Toggle language · Logout</text>
+
+  <!-- Arrow: Home ↔ Profile (tab navigation) -->
+  <line x1="400" y1="420" x2="598" y2="420" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="470" y="415" font-family="Arial" font-size="9" fill="#888">tab switch</text>
+  <line x1="598" y1="438" x2="400" y2="438" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+
+  <!-- Arrow: Profile Logout → Language -->
+  <path d="M 800 432 C 920 432, 920 115, 442 115" stroke="#a00" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arr-red)"/>
+  <text x="860" y="310" font-family="Arial" font-size="9" fill="#a00">Logout →</text>
+  <text x="860" y="322" font-family="Arial" font-size="9" fill="#a00">clears session</text>
+
+  <!-- Arrow: Home → Bus Results -->
+  <line x1="300" y1="470" x2="300" y2="553" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="305" y="515" font-family="Arial" font-size="9" fill="#333">Find Buses →</text>
+  <text x="305" y="528" font-family="Arial" font-size="9" fill="#888">router.push('/busResult')</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 4: BUS RESULTS
+  ════════════════════════════════════════════ -->
+
+  <rect x="160" y="555" width="280" height="80" rx="5" fill="#fff0f6" stroke="#db2777"/>
+  <text x="300" y="576" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Bus Results Screen</text>
+  <text x="300" y="591" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/busResult.tsx</text>
+  <text x="300" y="606" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">GET /api/routes/busroutes?source&amp;destination</text>
+  <text x="300" y="620" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">GET /api/routes/device-from-bus?busNumber</text>
+  <text x="300" y="634" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Select bus card → tap Route View</text>
+
+  <!-- Arrow: BusResult → Back to Home -->
+  <path d="M 160 575 C 100 575, 100 433, 198 433" stroke="#aaa" stroke-width="1.2" fill="none" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text x="60" y="510" font-family="Arial" font-size="9" fill="#888">← Back</text>
+
+  <!-- Arrow: Bus Results → Vertical Map -->
+  <line x1="300" y1="635" x2="300" y2="703" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="305" y="672" font-family="Arial" font-size="9" fill="#333">Route View →</text>
+  <text x="305" y="685" font-family="Arial" font-size="9" fill="#888">router.push('/verticalMap')</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 5: LIVE TRACKING
+  ════════════════════════════════════════════ -->
+
+  <rect x="80" y="705" width="430" height="90" rx="5" fill="#ecfdf5" stroke="#059669"/>
+  <text x="295" y="726" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Live Route Tracking Screen</text>
+  <text x="295" y="741" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">app/verticalMap.tsx</text>
+  <text x="295" y="756" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">GET /api/routes/trips/:busNumber  →  load all trips + stops</text>
+  <text x="295" y="770" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#1a56a0">GET /api/routes/location/:busNumber  →  poll GPS every 50s</text>
+  <text x="295" y="784" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Shows: stops · reached status · ETA · animated bus icon · speed</text>
+
+  <!-- Arrow: Tracking → Back to Bus Results -->
+  <path d="M 80 720 C 50 720, 50 595, 158 595" stroke="#aaa" stroke-width="1.2" fill="none" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text x="18" y="658" font-family="Arial" font-size="9" fill="#888">← Back</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 6: EXPRESS API SERVER (middleware)
+  ════════════════════════════════════════════ -->
+
+  <!-- Node.js / Express Server box -->
+  <rect x="600" y="390" width="0" height="0"/>
+
+  <!-- Express API block (right side) -->
+  <rect x="620" y="555" width="200" height="80" rx="5" fill="#fff8e1" stroke="#b45309"/>
+  <text x="720" y="576" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Express API Server</text>
+  <text x="720" y="591" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">backend/server.js</text>
+  <text x="720" y="606" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Routes: /api/users</text>
+  <text x="720" y="620" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Routes: /api/routes</text>
+  <text x="720" y="634" text-anchor="middle" font-family="Arial" font-size="9" fill="#888">Routes: /api/gps</text>
+
+  <!-- Arrow: App → Express -->
+  <line x1="442" y1="595" x2="618" y2="595" stroke="#b45309" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="490" y="588" font-family="Arial" font-size="9" fill="#b45309">HTTP Requests</text>
+
+  <!-- Arrow: Express → DB -->
+  <line x1="720" y1="636" x2="720" y2="703" stroke="#155724" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="725" y="672" font-family="Arial" font-size="9" fill="#155724">Mongoose ODM</text>
+
+
+  <!-- ════════════════════════════════════════════
+       ROW 6: MONGODB DATABASE LAYER
+  ════════════════════════════════════════════ -->
+
+  <!-- DB background band -->
+  <rect x="80" y="810" width="940" height="85" rx="6" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="550" y="828" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#155724">MongoDB Collections</text>
+
+  <!-- Individual collections as cylinders (simplified as rect+ellipse) -->
+  <!-- User -->
+  <ellipse cx="145" cy="845" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="95" y="845" width="100" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="145" cy="877" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="145" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">User</text>
+  <text x="145" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">name, phone</text>
+
+  <!-- Bus -->
+  <ellipse cx="265" cy="845" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="215" y="845" width="100" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="265" cy="877" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="265" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">Bus</text>
+  <text x="265" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">busNumber</text>
+
+  <!-- Route -->
+  <ellipse cx="385" cy="845" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="335" y="845" width="100" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="385" cy="877" rx="50" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="385" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">Route</text>
+  <text x="385" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">src, dest, stops[]</text>
+
+  <!-- BusRoute -->
+  <ellipse cx="510" cy="845" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="455" y="845" width="110" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="510" cy="877" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="510" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">BusRoute</text>
+  <text x="510" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">bus, route, timings</text>
+
+  <!-- BusPos -->
+  <ellipse cx="640" cy="845" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="585" y="845" width="110" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="640" cy="877" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="640" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">BusPos</text>
+  <text x="640" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">bus, posMachine</text>
+
+  <!-- PosMachine -->
+  <ellipse cx="775" cy="845" rx="60" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="715" y="845" width="120" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="775" cy="877" rx="60" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="775" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">PosMachine</text>
+  <text x="775" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">deviceId</text>
+
+  <!-- Gps -->
+  <ellipse cx="920" cy="845" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <rect x="865" y="845" width="110" height="32" fill="#d1fae5" stroke="#059669"/>
+  <ellipse cx="920" cy="877" rx="55" ry="8" fill="#a7f3d0" stroke="#059669"/>
+  <text x="920" y="865" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#155724">Gps</text>
+  <text x="920" y="897" text-anchor="middle" font-family="Arial" font-size="8" fill="#155724">lat, lng, timestamp</text>
+
+  <!-- ════════════════════════════════════════════
+       DB ARROWS from Tracking screen
+  ════════════════════════════════════════════ -->
+
+  <!-- Tracking → Bus -->
+  <path d="M 200 795 L 200 808 L 265 808 L 265 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+  <!-- Tracking → Route -->
+  <path d="M 230 795 L 230 804 L 385 804 L 385 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+  <!-- Tracking → BusRoute -->
+  <path d="M 260 795 L 260 800 L 510 800 L 510 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+  <!-- Tracking → BusPos -->
+  <path d="M 290 795 L 290 797 L 640 797 L 640 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+
+  <!-- Express → PosMachine, Gps -->
+  <path d="M 720 703 L 720 794 L 775 794 L 775 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+  <path d="M 720 703 L 720 790 L 920 790 L 920 836" stroke="#059669" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+
+  <!-- Register → User -->
+  <path d="M 650 300 C 650 800 145 800 145 836" stroke="#2563eb" stroke-width="1" fill="none" stroke-dasharray="3,2" marker-end="url(#arr-blue)"/>
+
+  <!-- ════════════════════════════════════════════
+       LEGEND
+  ════════════════════════════════════════════ -->
+  <rect x="80" y="908" width="940" height="1" fill="#ccc"/>
+  <text x="90" y="915" font-family="Arial" font-size="9" fill="#888">Legend:</text>
+  <line x1="135" y1="911" x2="160" y2="911" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="163" y="915" font-family="Arial" font-size="9" fill="#555">Navigation flow</text>
+  <line x1="260" y1="911" x2="285" y2="911" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <text x="288" y="915" font-family="Arial" font-size="9" fill="#888">Back navigation</text>
+  <line x1="390" y1="911" x2="415" y2="911" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arr-green)"/>
+  <text x="418" y="915" font-family="Arial" font-size="9" fill="#059669">Database query</text>
+  <line x1="510" y1="911" x2="535" y2="911" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arr-blue)"/>
+  <text x="538" y="915" font-family="Arial" font-size="9" fill="#2563eb">API call to backend</text>
+  <line x1="650" y1="911" x2="675" y2="911" stroke="#a00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr-red)"/>
+  <text x="678" y="915" font-family="Arial" font-size="9" fill="#a00">Logout / session clear</text>
+
+</svg>
+
+<div style="text-align:center;margin-top:12px;font-size:10px;color:#888;">
+  BUSTRACKERR &nbsp;|&nbsp; Solapur Municipal Corporation City Bus Tracker App &nbsp;|&nbsp; MIT Vishwaprayag University
+</div>
+
+</body>
+</html>

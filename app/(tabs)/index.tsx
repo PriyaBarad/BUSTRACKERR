@@ -11,15 +11,30 @@ import {
   Animated,
   Easing,
   Image,
+  Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { Buffer } from 'buffer';
 import Header from '../../components/Header';
 import { MaterialIcons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 // Set up Buffer globally if not already available
 global.Buffer = global.Buffer || Buffer;
+
+const { width } = Dimensions.get('window');
+
+// Dynamic build info from app.config.js (injected at every build/start)
+const APP_VERSION = Constants.expoConfig?.version ?? '1.0.0';
+const rawBuildDate = Constants.expoConfig?.extra?.buildDate;
+const BUILD_DATE = rawBuildDate
+  ? new Date(rawBuildDate).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  : 'N/A';
 
 // Enhanced constants with more options
 const COLORS = {
@@ -51,8 +66,8 @@ const FONT_SIZE = {
 type LanguageOption = 'en' | 'mr';
 
 const LANGUAGES = [
-  { code: 'en', name: 'English', icon: 'language' },
-  { code: 'mr', name: 'मराठी', icon: 'translate' },
+  { code: 'en', name: 'English', icon: 'language', textIcon: null },
+  { code: 'mr', name: 'मराठी', icon: 'translate', textIcon: 'म' },
 ];
 
 export default function LanguageScreen() {
@@ -104,8 +119,8 @@ export default function LanguageScreen() {
             resizeMode="contain"
           />
           
-          <Text style={styles.title}>Select Your Preferred Language</Text>
-          <Text style={styles.subtitle}>Please choose your language to continue</Text>
+          <Text style={styles.title}>Select Language</Text>
+          <Text style={styles.subtitle}>भाषा निवडा</Text>
           
           <View style={styles.buttonContainer}>
             {LANGUAGES.map((lang) => (
@@ -119,6 +134,7 @@ export default function LanguageScreen() {
                 <LanguageButton 
                   language={lang.name}
                   icon={lang.icon}
+                  textIcon={lang.textIcon}
                   selected={selectedLanguage === lang.code}
                   loading={loading && selectedLanguage === lang.code}
                   onPress={() => handleLanguageSelect(lang.code as LanguageOption)}
@@ -135,7 +151,10 @@ export default function LanguageScreen() {
           )}
         </View>
         
-        <Text style={styles.footerText}>You can change this later in settings</Text>
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText}>Powered by MIT Vishwaprayag University</Text>
+          <Text style={styles.footerMeta}>v{APP_VERSION}  •  Build: {BUILD_DATE}</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -149,7 +168,16 @@ interface LanguageButtonProps {
   onPress: () => void;
 }
 
-const LanguageButton = ({ language, icon, selected, loading, onPress }: LanguageButtonProps) => (
+interface LanguageButtonProps {
+  language: string;
+  icon: string;
+  textIcon?: string | null;
+  selected: boolean;
+  loading: boolean;
+  onPress: () => void;
+}
+
+const LanguageButton = ({ language, icon, textIcon, selected, loading, onPress }: LanguageButtonProps) => (
   <TouchableOpacity 
     style={[
       styles.languageButton,
@@ -163,12 +191,16 @@ const LanguageButton = ({ language, icon, selected, loading, onPress }: Language
       <ActivityIndicator size="small" color={COLORS.white} />
     ) : (
       <>
-        <MaterialIcons 
-          name={icon as any} 
-          size={20} 
-          color={selected ? COLORS.white : COLORS.primary} 
-          style={styles.buttonIcon}
-        />
+        {textIcon ? (
+          <Text style={[styles.textIconLabel, selected && styles.textIconLabelSelected]}>{textIcon}</Text>
+        ) : (
+          <MaterialIcons 
+            name={icon as any} 
+            size={20} 
+            color={selected ? COLORS.white : COLORS.primary} 
+            style={styles.buttonIcon}
+          />
+        )}
         <Text style={[
           styles.languageButtonText,
           selected && styles.languageButtonTextSelected,
@@ -193,25 +225,24 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.xlarge,
   },
   card: {
-    width: '100%',
-    maxWidth: 400,
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: SPACING.xlarge,
-    alignItems: 'center',
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 5,
+    width: width > 500 ? 420 : '88%',
     alignSelf: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 14,
+    padding: SPACING.medium,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 8,
+    marginVertical: 10,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   logo: {
-     width: 100,        // set width
-    height: 100,       // set height
-    borderRadius: 50,  // half of width/height for a perfect circle
+    width: 150,        // set width
+    height: 150,       // set height
    
   },
   title: {
@@ -273,10 +304,30 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     fontSize: FONT_SIZE.small,
   },
-  footerText: {
+  footerContainer: {
     marginTop: SPACING.large,
+    alignItems: 'center',
+  },
+  footerText: {
     color: COLORS.textSecondary,
     fontSize: FONT_SIZE.small,
     textAlign: 'center',
+    fontWeight: '500',
+  },
+  footerMeta: {
+    marginTop: 4,
+    color: COLORS.textSecondary,
+    fontSize: 11,
+    textAlign: 'center',
+    opacity: 0.7,
+  },
+  textIconLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.primary,
+    marginRight: SPACING.small,
+  },
+  textIconLabelSelected: {
+    color: COLORS.white,
   },
 });
