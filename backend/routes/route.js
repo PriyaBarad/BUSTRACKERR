@@ -5,7 +5,7 @@ const router = express.Router();
 const Route = require('../models/Route');
 const BusRoute = require('../models/BusRoute');
 const Bus = require('../models/Bus');
-const Gps = require('../models/gps');
+const Gps = require('../models/Gps');
 const BusPos = require('../models/BusPos');
 const PosMachine = require('../models/PosMachine');
 
