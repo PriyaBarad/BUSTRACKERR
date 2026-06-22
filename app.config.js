@@ -1,14 +1,11 @@
-// app.config.js — Dynamic Expo config.
-// Runs at every `expo start` / `expo build`, so buildDate is always fresh.
-
 module.exports = ({ config }) => {
   return {
     ...config,
-    // extra must be at the expo root for Constants.expoConfig.extra to work
     extra: {
-      // preserve existing extra (router, eas) from app.json
       ...(config.extra ?? {}),
-      // injected fresh on every build / expo start
+      eas: {
+        projectId: "ebeb2fbc-63e6-4727-b6e8-d189d5c01df4",
+      },
       buildDate: new Date().toISOString(),
     },
   };
