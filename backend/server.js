@@ -14,14 +14,16 @@ app.use(cors());
 app.use(express.json());
 
 // Import route handlers
-const routeRoutes = require('./routes/route');  // bus routes
-const userRoutes = require('./routes/user');    // register/login
-const gpsRoutes = require('./routes/gps');      // GPS data
+const routeRoutes    = require('./routes/route');     // bus routes
+const userRoutes     = require('./routes/user');       // register/login
+const gpsRoutes      = require('./routes/gps');        // GPS data
+const geometryRoutes = require('./routes/geometry');   // road geometry (OSRM)
 
 // Mount routes
 app.use('/api/routes', routeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/gps', gpsRoutes);
+app.use('/api/geometry', geometryRoutes);
 
 // Connect to MongoDB and start server
 mongoose

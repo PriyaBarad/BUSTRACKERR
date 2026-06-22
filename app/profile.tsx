@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
+import MenuDrawer from '../components/MenuDrawer';
 import strings from '../locales/strings';
 
 export default function ProfileScreen() {
   const [lang, setLang] = useState<'en' | 'mr'>('en');
   const [user, setUser] = useState<{ name: string; phone: string } | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,19 +43,27 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      <MenuDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <View style={styles.card}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
             onPress={() => router.push('/home')}
-            style={styles.backButton}
+            style={styles.headerButton}
             activeOpacity={0.7}
           >
-            <Text style={styles.backText}>{strings[lang]?.home || 'Home'}</Text>
+            <Ionicons name="arrow-back" size={22} color="#2563eb" />
           </TouchableOpacity>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{strings[lang]?.profile || 'Profile'}</Text>
           </View>
+          <TouchableOpacity 
+            onPress={() => setDrawerOpen(true)}
+            style={styles.headerButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="menu" size={24} color="#2563eb" />
+          </TouchableOpacity>
         </View>
 
         {/* Profile Section */}
@@ -113,30 +124,26 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25,
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
     paddingBottom: 15,
     width: '100%',
   },
-  backButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+  headerButton: {
+    padding: 6,
     borderRadius: 8,
     backgroundColor: '#f1f5f9',
-  },
-  backText: {
-    fontSize: 16,
-    color: '#2563eb',
-    fontWeight: '600',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleContainer: {
     flex: 1,
     alignItems: 'center',
-    marginRight: 40, // To compensate for the back button width
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
     color: '#0f172a',
     textAlign: 'center',

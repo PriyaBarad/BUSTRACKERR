@@ -23,4 +23,27 @@ router.get('/:deviceId', async (req, res) => {
   }
 });
 
+// ✅ GET GPS coordinate history for a deviceId
+router.get('/history/:deviceId', async (req, res) => {
+  const { deviceId } = req.params;
+  try {
+    // Retrieve the last 200 GPS records sorted by timestamp descending, then reverse them to be in chronological order
+    const history = await Gps.find({ deviceId })
+      .sort({ timestamp: -1 })
+      .limit(200)
+      .lean();
+
+    const chronologicalHistory = history.reverse().map(record => ({
+      latitude: record.latitude,
+      longitude: record.longitude,
+      timestamp: record.timestamp
+    }));
+
+    res.json(chronologicalHistory);
+  } catch (err) {
+    console.error('❌ GPS history fetch error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

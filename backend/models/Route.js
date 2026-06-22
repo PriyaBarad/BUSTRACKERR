@@ -17,7 +17,8 @@ const tripSchema = new mongoose.Schema(
   {
     sourceTime: { type: String, required: true }, // e.g. "12:00"
     destinationTime: { type: String, required: true }, // e.g. "14:00"
-    stops: [stopSchema]
+    stops: [stopSchema],
+    direction: { type: String, enum: ['forward', 'return'], default: 'forward' }
   },
   { _id: true }
 );
@@ -31,7 +32,18 @@ const routeSchema = new mongoose.Schema(
     distance: { type: Number, required: true }, // in km
     estimatedDuration: { type: Number, required: true }, // in minutes
     isActive: { type: Boolean, default: true },
-    trips: [tripSchema]
+    trips: [tripSchema],
+    pathWaypoints: {
+      type: [{
+        latitude: Number,
+        longitude: Number
+      }],
+      default: []
+    },
+    // Cached road-following polyline from OSRM.
+    // Stored as array of [longitude, latitude] pairs.
+    // Populated lazily on first geometry request and reused thereafter.
+    roadGeometry: { type: [[Number]], default: [] }
   },
   { timestamps: true }
 );

@@ -70,6 +70,9 @@ router.get('/busroutes', async (req, res) => {
           source: matchedRoute.source,
           destination: matchedRoute.destination,
           timings: busRoute.timings,
+          busType: bus.type || 'Ordinary',
+          estimatedDuration: matchedRoute.estimatedDuration || 0,
+          distance: matchedRoute.distance || 0,
         });
       }
     }
