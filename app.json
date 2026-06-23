@@ -21,7 +21,12 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.priya_barad.app",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDEN8ARQ04OZcVWskUjmxjTRXXxb-S_ymo"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
