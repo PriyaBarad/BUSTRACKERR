@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +20,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.priya_barad.app"
+      "package": "com.priya_barad.app",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -41,6 +45,9 @@
     },
     "extra": {
       "router": {}
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ebeb2fbc-63e6-4727-b6e8-d189d5c01df4"
     }
   }
 }
